@@ -7,17 +7,17 @@ from util import split_and_zero_padding
 from util import ManDist
 
 # File paths
-TEST_CSV = './data/test-20.csv'
+TEST_CSV = './data/similarity_measure.xlsx'
 
 # Load training set
-test_df = pd.read_csv(TEST_CSV)
+test_df1 = pd.read_excel(TEST_CSV)
 for q in ['question1', 'question2']:
-    test_df[q + '_n'] = test_df[q]
+    test_df1[q + '_n'] = test_df1[q]
 
 # Make word2vec embeddings
 embedding_dim = 300
 max_seq_length = 20
-test_df, embeddings = make_w2v_embeddings(test_df, embedding_dim=embedding_dim, empty_w2v=False)
+test_df, embeddings = make_w2v_embeddings(test_df1, embedding_dim=embedding_dim, empty_w2v=False)
 
 # Split to dicts and append zero padding.
 X_test = split_and_zero_padding(test_df, max_seq_length)
@@ -31,4 +31,6 @@ model = tf.keras.models.load_model('./data/SiameseLSTM.h5', custom_objects={'Man
 model.summary()
 
 prediction = model.predict([X_test['left'], X_test['right']])
+test_df1['similarity_score']=prediction
+test_df1.to_excel('./data/final.xlsx',index=False)
 print(prediction)

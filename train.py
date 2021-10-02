@@ -55,8 +55,8 @@ assert len(X_train['left']) == len(Y_train)
 # --
 
 # Model variables
-gpus = 2
-batch_size = 1024 * gpus
+gpus = 0
+batch_size = 1024
 n_epoch = 50
 n_hidden = 50
 
